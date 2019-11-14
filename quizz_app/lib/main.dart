@@ -15,16 +15,30 @@ class _MyAppState extends State<MyApp> {
 
   void _answerQuestion() {
     setState(() {
-      _questionIndex == 0 ? _questionIndex = 1 : _questionIndex = 0;
+      if (_questionIndex < 2) {
+        _questionIndex =  _questionIndex + 1;
+      } else {
+        _questionIndex = 0;
+      }
     });
   }
 
   @override
   build(BuildContext context) {
     var questions = [
-      'What\'s your favorite color?',
-      'What\'s your favorite animal?',
-    ];
+      {
+        'questionText': 'What\'s your favorite color?',
+        'answers' : ['red', 'blue', 'green', 'yellow'],
+      },
+      {
+        'questionText': 'What\'s your favorite animal?',
+        'answers': ['dog', 'cat', 'rabbit', 'pig'],
+      },
+      {
+        'questionText': 'What\'s your favorite flavour?',
+        'answers': ['chocolate', 'vanilla', 'strawberry', 'mint'],
+      },
+     ];
 
     return MaterialApp(
       home: Scaffold(
@@ -33,10 +47,12 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            Question(questions[_questionIndex]),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
+            Question(
+              questions[_questionIndex]['questionText'],
+            ),
+            ...(questions[_questionIndex]['answers'] as List<String>).map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList(),
           ],
         ),
       ),
