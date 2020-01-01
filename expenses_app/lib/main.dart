@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
+        errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
               title: TextStyle(
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
+              button: TextStyle(color: Colors.white),
             ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
@@ -57,25 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
     Transaction(
       id: 't2',
-      title: 'Weekly Groceries',
-      amount: 103.65,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't3',
-      title: 'Weekly Groceries',
-      amount: 103.65,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't4',
-      title: 'Weekly Groceries',
-      amount: 103.65,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't5',
-      title: 'Weekly Groceries',
+      title: 'Nike Air force 1',
       amount: 103.65,
       date: DateTime.now(),
     ),
@@ -91,11 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String title, double amount) {
+  void _addNewTransaction(String title, double amount, DateTime date) {
     final newTx = Transaction(
       title: title,
       amount: amount,
-      date: DateTime.now(),
+      date: date,
       id: DateTime.now().toString(),
     );
 
@@ -114,6 +98,14 @@ class _MyHomePageState extends State<MyHomePage> {
             behavior: HitTestBehavior.opaque,
           );
         });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((tx) {
+        return tx.id == id;
+      });
+    });
   }
 
   @override
@@ -136,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: double.infinity,
               child: Chart(_recentTransactions),
             ),
-            TransactionList(_userTransactions),
+            TransactionList(_userTransactions, _deleteTransaction),
           ],
         ),
       ),
